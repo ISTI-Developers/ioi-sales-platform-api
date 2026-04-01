@@ -31,7 +31,12 @@ switch ($uri[1]) {
     case 'roles':
         require __DIR__ . '/routes/roles.php';
         break;
-
+    case 'clients':
+        require __DIR__ . '/routes/clients.php';
+        break;
+    case 'activities':
+        require __DIR__ . '/routes/activities.php';
+        break;
     default:
         http_response_code(404);
         echo json_encode(["message" => "Route not found", "route" => $uri]);

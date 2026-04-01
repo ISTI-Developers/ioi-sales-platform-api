@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         $jwt = new JWTHandler();
 
-        $this->setStatement("SELECT ua.ID, ua.username, ua.email_address, ua.role_id, ui.first_name, ui.middle_name, ui.last_name, ui.image, ui.sales_unit_id, ua.status_id FROM user_accounts ua JOIN user_information ui ON ua.ID = ui.account_id WHERE ua.ID = ?");
+        $this->setStatement("SELECT ua.ID, ua.username, ua.email_address, ua.role_id, ui.first_name, ui.middle_name, ui.last_name, ui.image, ui.team_id, ua.status_id FROM user_accounts ua JOIN user_information ui ON ua.ID = ui.account_id WHERE ua.ID = ?");
         $this->statement->execute([$account->ID]);
         $user = $this->statement->fetch(PDO::FETCH_ASSOC);
 
@@ -34,11 +34,19 @@ class AuthController extends Controller
         return [...$user, "token" => $token];
     }
 
-    public function validate($token){
+    public function validate($token)
+    {
         $jwt = new JWTHandler();
 
-        return $jwt->verify($token);
+        $data = $jwt->verify($token);
 
+        if (!$data) {
+            throw new Exception("Session expired.");
+        }
 
+        $this->setStatement("UPDATE user_accounts SET last_login = NOW() WHERE ID = ?");
+        $this->statement->execute([$data['ID']]);
+
+        return $data;
     }
 }

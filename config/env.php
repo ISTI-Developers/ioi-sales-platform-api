@@ -18,9 +18,12 @@ const HEADER = [
 ];
 const SECRET = 'salesioiapi';
 
-// const MAIL_USERNAME = 'noreply@unitedneon.com';
-// const MAIL_FROM = 'noreply@unitedneon.com';
-// const MAIL_NAME = 'UNMG Sales Platform Admin';
-// const MAIL_PASSWORD = 'ydcncqqkjjmtuvkb';
+const MAIL_USERNAME = 'noreply@unitedneon.com';
+const MAIL_FROM = 'noreply@unitedneon.com';
+const MAIL_NAME = 'InnovationOne Sales Platform';
+const MAIL_PASSWORD = 'ydcncqqkjjmtuvkb';
+
+const DEV_SELF = 'http://localhost:1003';
+const PROD_SELF = 'http://sales.innovationone.com';
 
 date_default_timezone_set('Asia/Manila');

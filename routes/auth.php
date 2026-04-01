@@ -10,7 +10,6 @@ try {
     $con = new AuthController();
 
     switch ($method) {
-
         case 'GET':
             echo password_hash("un1t3dn30n", PASSWORD_BCRYPT);
             break;
@@ -41,6 +40,7 @@ try {
                     echo json_encode($user);
                     break;
                 case "logout":
+                    
                     break;
 
             }

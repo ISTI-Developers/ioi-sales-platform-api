@@ -30,22 +30,19 @@ class Controller
         }
     }
 
-    public function get_client_information_value($table_name, $row_id)
+    public function auditLog(array $data)
     {
-        $column = "name";
-        $id = "ID";
-        switch ($table_name) {
-            case "user_information":
-                $column = "CONCAT(first_name, ' ', last_name) as full_name";
-                $id = "account_id";
-                break;
-            case "sales_units":
-                $column = "unit_name";
-                break;
-        }
-        $query = "SELECT {$column} FROM {$table_name} WHERE {$id} = ?";
-        $this->setStatement($query);
-        $this->statement->execute([$row_id]);
-        return $this->statement->fetchColumn();
+        $this->setStatement("INSERT INTO audit_logs (account_id, account_name, action, module, entity_type, entity_id, old_values, new_values, description) VALUES (:account_id, :account_name, :action, :module, :entity_type, :entity_id, :old_values, :new_values, :description)");
+        return $this->statement->execute([
+            ':account_id' => $data['account_id'] ?? null,
+            ':account_name' => $data['account_name'] ?? null,
+            ':action' => $data['action'],
+            ':module' => $data['module'],
+            ':entity_type' => $data['entity_type'] ?? null,
+            ':entity_id' => $data['entity_id'] ?? null,
+            ':old_values' => isset($data['old_values']) ? json_encode($data['old_values']) : null,
+            ':new_values' => isset($data['new_values']) ? json_encode($data['new_values']) : null,
+            ':description' => $data['description'] ?? null,
+        ]);
     }
 }
