@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../controller/clients.controller.php';
-// require_once __DIR__ . '/../controller/activities.controller.php';
+require_once __DIR__ . '/../controller/activities.controller.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($request, PHP_URL_PATH);
@@ -118,10 +118,11 @@ try {
                     if (!$result) {
                         throw new Exception("Cannot update the client stage");
                     }
-                    // $activity = "[{$data->previousStage}] to [{$data->newStage}]";
-                    // $activities_con = new ActivitiesController();
-                    // $tag = json_encode(["stage update"]);
-                    // $result = $activities_con->add_activity($activity, $user['ID'], $user['team_id'] ?? null, $tag, $ID, $data->stage);
+                    if (isset($data->remarks)) {
+                        $activities_con = new ActivitiesController();
+                        $tag = json_encode(["stage changed"]);
+                        $result = $activities_con->add_activity($data->remarks, $user['ID'], $user['team_id'] ?? null, $tag, $ID, $data->stage);
+                    }
 
                     $log = [
                         "account_id" => $user['ID'],
@@ -146,7 +147,6 @@ try {
                     ]);
                     break;
                 }
-
             }
             break;
 

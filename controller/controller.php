@@ -15,6 +15,8 @@ class Controller
             $this->connection = new PDO($dsn, $username, $password);
             $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+            $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             $this->isConnectionSuccess = true;
         } catch (PDOException $e) {
             $this->connectionError = $e->getMessage();

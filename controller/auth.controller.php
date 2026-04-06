@@ -31,7 +31,9 @@ class AuthController extends Controller
         $user = $this->statement->fetch(PDO::FETCH_ASSOC);
 
         $token = $jwt->generate($user, $remember_me);
-        return [...$user, "token" => $token];
+        $user['token'] = $token;
+        return $user;
+        // return [...$user, "token" => $token];
     }
 
     public function validate($token)

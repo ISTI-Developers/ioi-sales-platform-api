@@ -9,13 +9,27 @@ $count = count($uri);
 
 try {
     require_once __DIR__ . '/../middleware/auth.middleware.php';
-    $user = authMiddleware();
+    // $user = authMiddleware();
 
     $con = new ActivitiesController();
 
     switch ($method) {
         case 'GET':
             if ($count === 2) {
+                if (!isset($_GET['week'])) {
+                    throw new Exception("Week not set");
+                }
+                $activities = $con->get_activities($_GET['week']);
+
+                foreach ($activities as $activity) {
+                    if ($activity->tags !== null) {
+                        $activity->tags = json_decode($activity->tags);
+                    }
+                    if ($activity->date_submitted) {
+                        $activity->date_submitted = date('c', strtotime($activity->date_submitted));
+                    }
+                }
+                echo json_encode($activities);
                 break;
             }
             if ($count === 3) {
